@@ -18,7 +18,7 @@ public class Main {
         v.setStudentID(2015672831);
         v.setProgram("IT");
 
-        //s.sdisplay();
+        s.sdisplay();
         v.sdisplay();
 
         Course a = new Course();
