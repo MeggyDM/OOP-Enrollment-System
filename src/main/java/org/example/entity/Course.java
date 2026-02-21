@@ -1,5 +1,4 @@
-package org.example;
-import java.util.*;
+package org.example.model;
 
 public class Course {
     private int courseID;

@@ -1,5 +1,4 @@
-package org.example;
-import java.util.*;
+package org.example.model;
 
 public class Student {
     private int studentID;
@@ -17,26 +16,32 @@ public class Student {
     }
 
     public void setStudentID(int studentID){
+
         this.studentID = studentID;
     }
 
     public int getStudentID(){
+
         return studentID;
     }
 
     public void setStudentName(String studentName){
+
         this.studentName = studentName;
     }
 
     public String getStudentName(){
+
         return studentName;
     }
 
     public void setProgram(String program){
+
         this.program = program;
     }
 
     public String getProgram(){
+
         return program;
     }
 
