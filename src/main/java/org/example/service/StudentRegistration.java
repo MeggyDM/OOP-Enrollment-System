@@ -37,13 +37,14 @@ public class StudentRegistration {
     }
 
     //removeStudent
-    public void removeStudent(Student student) {
+    public boolean removeStudent(Student student) {
         for (int i = 0; i < studentList.size(); i++) {
             if (studentList.get(i).getStudentID() == student.getStudentID()) {
                 studentList.remove(student);
-                break;
+                return true;
             }
         }
+        return false;
     }
 
 }
