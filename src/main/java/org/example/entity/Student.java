@@ -1,4 +1,4 @@
-package org.example.model;
+package org.example.entity;
 
 public class Student {
     private int studentID;
@@ -13,6 +13,10 @@ public class Student {
         this.studentName = studentName;
         this.studentID = studentID;
         this.program = program;
+    }
+
+    public Student(int studentID){
+        this.studentID = studentID;
     }
 
     public void setStudentID(int studentID){
@@ -51,5 +55,12 @@ public class Student {
         System.out.println("Program: " + getProgram() + "\n");
     }
 
-
+    @Override
+    public String toString() {
+        return "Student{" +
+                "studentID=" + studentID +
+                ", studentName='" + studentName + '\'' +
+                ", program='" + program + '\'' +
+                '}';
+    }
 }
