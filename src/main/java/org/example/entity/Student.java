@@ -1,43 +1,14 @@
 package org.example.entity;
 
-public class Student {
-    private int studentID;
-    private String studentName;
+public class Student extends Person{
     private String program;
 
-    public Student(){
-        this("Unknown", 0, "Unknown");
-    }
-
-    public Student(String studentName, int studentID, String program){
-        this.studentName = studentName;
-        this.studentID = studentID;
+    public Student(String PersonID, String PersonName, String program){
+        super(PersonID, PersonName);
         this.program = program;
     }
 
-    public Student(int studentID){
-        this.studentID = studentID;
-    }
 
-    public void setStudentID(int studentID){
-
-        this.studentID = studentID;
-    }
-
-    public int getStudentID(){
-
-        return studentID;
-    }
-
-    public void setStudentName(String studentName){
-
-        this.studentName = studentName;
-    }
-
-    public String getStudentName(){
-
-        return studentName;
-    }
 
     public void setProgram(String program){
 
@@ -50,17 +21,10 @@ public class Student {
     }
 
     public void sdisplay(){
-        System.out.println("Student ID: " + getStudentID());
-        System.out.println("Student Name: " + getStudentName());
+        System.out.println("Student ID: " + getPersonID());
+        System.out.println("Student Name: " + getPersonName());
         System.out.println("Program: " + getProgram() + "\n");
     }
 
-    @Override
-    public String toString() {
-        return "Student{" +
-                "studentID=" + studentID +
-                ", studentName='" + studentName + '\'' +
-                ", program='" + program + '\'' +
-                '}';
-    }
+
 }
