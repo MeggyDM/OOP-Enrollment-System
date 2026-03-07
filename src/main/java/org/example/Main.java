@@ -1,5 +1,6 @@
 package org.example;
 import org.example.entity.Course;
+import org.example.entity.Instructor;
 import org.example.entity.Student;
 import org.example.service.StudentRegistration;
 
@@ -7,6 +8,15 @@ import java.util.*;
 
 public class Main {
     public static void main(String[] args) {
+
+
+        Instructor instructor = new Instructor();
+        instructor.setInstructorID("1003");
+        instructor.setInstructorName("Bob");
+        instructor.setCourse("I.T.");
+
+
+
         Scanner input = new Scanner(System.in);
         //ito may switch case
         StudentRegistration SR = new StudentRegistration();
