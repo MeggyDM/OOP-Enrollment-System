@@ -1,6 +1,7 @@
 package org.example;
 import org.example.entity.Course;
 import org.example.entity.Instructor;
+import org.example.entity.Person;
 import org.example.entity.Student;
 import org.example.service.StudentRegistration;
 import org.example.service.TuitionFeePayment;
@@ -15,6 +16,11 @@ public class Main {
 
         System.out.println(tuition.getBalance());
         System.out.println(tuition.isFullyPaid());
+
+        Person instructor = new Instructor("13","bro","IT");
+        instructor.mainTask();
+
+        System.out.println(instructor instanceof Person);
 
         Scanner input = new Scanner(System.in);
         //ito may switch case
