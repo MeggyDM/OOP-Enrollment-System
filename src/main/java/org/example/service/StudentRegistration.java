@@ -48,5 +48,9 @@ public class StudentRegistration extends Person {
         return false;
     }
 
+    @Override
+    public void mainTask() {
+        System.out.println("Registers students");
+    }
 }
 

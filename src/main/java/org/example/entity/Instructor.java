@@ -18,9 +18,8 @@ public class Instructor extends Person{
     }
 
 
-
-
-
-
-
+    @Override
+    public void mainTask() {
+        System.out.println("Instructor teaches");
+    }
 }

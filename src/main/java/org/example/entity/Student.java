@@ -8,8 +8,6 @@ public class Student extends Person{
         this.program = program;
     }
 
-
-
     public void setProgram(String program){
 
         this.program = program;
@@ -27,4 +25,8 @@ public class Student extends Person{
     }
 
 
+    @Override
+    public void mainTask() {
+        System.out.println("Student learns");
+    }
 }

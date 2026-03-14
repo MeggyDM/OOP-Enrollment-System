@@ -1,6 +1,6 @@
 package org.example.entity;
 
-public class Person {
+public abstract class Person {
     private String PersonID;
     private String PersonName;
 
@@ -25,4 +25,6 @@ public class Person {
     public void setPersonName(String PersonName){
         this.PersonName= PersonName;
     }
+
+    public abstract void mainTask();
 }
