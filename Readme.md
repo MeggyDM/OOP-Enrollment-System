@@ -27,3 +27,13 @@ Author : Meg De Mesa
 
 **StudentRegistration Class**
 ![Screenshot 2026-03-07 at 4.53.09 PM.png](src/main/resources/images/Screenshot%202026-03-07%20at%204.53.09%E2%80%AFPM.png)
+
+## **Abstraction**
+Person Class
+![Screenshot 2026-03-14 at 5.12.57 PM.png](src/main/resources/images/Screenshot%202026-03-14%20at%205.12.57%E2%80%AFPM.png)
+
+Instructor Class
+![Screenshot 2026-03-14 at 5.14.29 PM.png](src/main/resources/images/Screenshot%202026-03-14%20at%205.14.29%E2%80%AFPM.png)
+
+Student Class
+![Screenshot 2026-03-14 at 5.15.13 PM.png](src/main/resources/images/Screenshot%202026-03-14%20at%205.15.13%E2%80%AFPM.png)

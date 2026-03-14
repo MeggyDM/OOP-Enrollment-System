@@ -41,7 +41,8 @@ public class CourseRegistration extends Person {
     }
 
 
-
-
-
+    @Override
+    public void mainTask() {
+        System.out.println("Registers courses");
+    }
 }
