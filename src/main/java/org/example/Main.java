@@ -3,12 +3,18 @@ import org.example.entity.Course;
 import org.example.entity.Instructor;
 import org.example.entity.Student;
 import org.example.service.StudentRegistration;
+import org.example.service.TuitionFeePayment;
 
 import java.util.*;
 
 public class Main {
     public static void main(String[] args) {
+        TuitionFeePayment tuition = new TuitionFeePayment();
+        System.out.println(tuition.calculateTuitionFee(3, 0));
+        tuition.makePayment(2000);
 
+        System.out.println(tuition.getBalance());
+        System.out.println(tuition.isFullyPaid());
 
         Scanner input = new Scanner(System.in);
         //ito may switch case
