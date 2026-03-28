@@ -1,10 +1,7 @@
 package org.example;
 import org.example.entity.Course;
-import org.example.entity.Instructor;
-import org.example.entity.Person;
-import org.example.entity.Student;
-import org.example.service.StudentRegistration;
-import org.example.service.TuitionFeePayment;
+import org.example.entity.*;
+import org.example.service.*;
 
 import java.util.*;
 
@@ -25,6 +22,7 @@ public class Main {
         Scanner input = new Scanner(System.in);
         //ito may switch case
         StudentRegistration SR = new StudentRegistration();
+        Registrar registrar = new Registrar(new StudentRegistration(), new CourseRegistration());
 
         boolean check = true;
 
@@ -48,24 +46,24 @@ public class Main {
 
                     System.out.print("Enter Student ID: ");
                     String ID = input.nextLine();
-                    input.nextLine();
 
                     System.out.print("Enter Student program: ");
                     String prog = input.nextLine();
 
-                    SR.saveStudent(new Student(name, ID, prog));
-                    SR.displayAllStudent();
+                    registrar.saveStudent(new Student(name, ID, prog));
+                    registrar.displayAllStudent();
                     break;
 
                 case 2: //display
                     System.out.println("\nHere's the student list.");
-                    SR.displayAllStudent();
+                    registrar.displayAllStudent();
                     break;
 
-                case 3: //update
+                case 3: // update
                     System.out.print("Enter the Student ID you want to update: ");
                     String upt = input.nextLine();
-                    input.nextLine();
+
+
 
                     System.out.print("Enter the Student Name you want to update: ");
                     name = input.nextLine();
@@ -74,7 +72,7 @@ public class Main {
                     prog = input.nextLine();
 
 
-                    if (SR.updateStudent(new Student(name, upt, prog))) {
+                    if (registrar.updateStudent(new Student(name, upt, prog))) {
                         System.out.println("Student updated successfully!");
                     } else {
                         System.out.println("Error: Student ID " + upt + " not found.");
