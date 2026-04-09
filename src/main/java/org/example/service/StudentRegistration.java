@@ -6,18 +6,20 @@ import org.example.entity.Person;
 import org.example.entity.Student;
 
 
-public class StudentRegistration extends Person {
+public class StudentRegistration extends Person implements StudentReg {
     static Scanner input = new Scanner(System.in);
     private ArrayList<Student> studentList = new ArrayList<>();
 
 
 
     //add
+    @Override
     public void saveStudent(Student student) {
         studentList.add(student);
     }
 
     //display
+    @Override
     public void displayAllStudent() {
         for (Student s : studentList) {
             System.out.println("\nStudent Name: " + s.getPersonName());
@@ -27,6 +29,7 @@ public class StudentRegistration extends Person {
     }
 
     //update
+    @Override
     public boolean updateStudent(Student student) {
         for (int i = 0; i < studentList.size(); i++) {
             if (studentList.get(i).getPersonID() == student.getPersonID()) {
@@ -38,6 +41,7 @@ public class StudentRegistration extends Person {
     }
 
     //removeStudent
+    @Override
     public boolean removeStudent(Student student) {
         for (int i = 0; i < studentList.size(); i++) {
             if (studentList.get(i).getPersonID() == student.getPersonID()) {

@@ -8,8 +8,6 @@ public class Course extends Person{
         this.courseProgram = courseProgram;
     }
 
-
-
     public void setCourseProgram (String courseProgram){
         this.courseProgram = courseProgram;
     }
