@@ -37,3 +37,10 @@ Instructor Class
 
 Student Class
 ![Screenshot 2026-03-14 at 5.15.13 PM.png](src/main/resources/images/Screenshot%202026-03-14%20at%205.15.13%E2%80%AFPM.png)
+
+## **Interface**
+Student Registration interface
+![Screenshot 2026-04-09 at 9.27.13 PM.png](src/main/resources/images/Screenshot%202026-04-09%20at%209.27.13%E2%80%AFPM.png)
+
+Course Registration interface
+![Screenshot 2026-04-09 at 9.28.16 PM.png](src/main/resources/images/Screenshot%202026-04-09%20at%209.28.16%E2%80%AFPM.png)
