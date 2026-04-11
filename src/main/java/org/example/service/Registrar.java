@@ -5,10 +5,12 @@ import org.example.entity.*;
 public class Registrar {
     private StudentReg studentRegistration;
     private CourseReg courseRegistration;
+    private DepartmentReg departmentRegistration;
 
     public Registrar(StudentReg studentRegistration, CourseReg courseRegistration) {
         this.studentRegistration = studentRegistration;
         this.courseRegistration = courseRegistration;
+        this.departmentRegistration = departmentRegistration;
     }
 
     public Registrar() {
@@ -17,12 +19,12 @@ public class Registrar {
 
     public String saveStudent(Student student){
         studentRegistration.saveStudent(student);
-        return "Sucess!";
+        return "Success!";
     }
 
     public String displayAllStudent(){
         studentRegistration.displayAllStudent();
-        return "Sucess!";
+        return "Success!";
     }
 
     public boolean updateStudent(Student student){
@@ -32,27 +34,27 @@ public class Registrar {
 
     public String removeStudent(Student student){
         studentRegistration.removeStudent(student);
-        return "Sucess!";
+        return "Success!";
     }
 
     public String save(Course course){
         courseRegistration.save(course);
-        return "Sucess!";
+        return "Success!";
     }
 
     public String displayAll(){
         courseRegistration.displayAll();
-        return "Sucess!";
+        return "Success!";
     }
 
     public String updateCourse(Course course){
         courseRegistration.updateCourse(course);
-        return "Sucess!";
+        return "Success!";
     }
 
     public String removeCourse(Course course){
         courseRegistration.removeCourse(course);
-        return "Sucess!";
+        return "Success!";
     }
 
 

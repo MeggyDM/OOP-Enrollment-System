@@ -22,6 +22,7 @@ public class Main {
         Scanner input = new Scanner(System.in);
         //ito may switch case
         StudentRegistration SR = new StudentRegistration();
+        CourseRegistration CR = new CourseRegistration();
         Registrar registrar = new Registrar(new StudentRegistration(), new CourseRegistration());
 
         boolean check = true;
