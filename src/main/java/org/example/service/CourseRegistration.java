@@ -1,7 +1,7 @@
 package org.example.service;
 import java.util.*;
-import org.example.entity.Course;
-import org.example.entity.Person;
+import org.example.model.Course;
+import org.example.model.Person;
 
 public class CourseRegistration extends Person implements CourseReg{
     private ArrayList<Course> courseList = new ArrayList<>();

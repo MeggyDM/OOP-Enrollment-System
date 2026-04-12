@@ -1,4 +1,4 @@
-package org.example.entity;
+package org.example.model;
 
 public class Course extends Person{
     private String courseProgram;
