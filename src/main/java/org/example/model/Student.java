@@ -1,10 +1,10 @@
-package org.example.entity;
+package org.example.model;
 
 public class Student extends Person{
     private String program;
 
-    public Student(String PersonID, String PersonName, String program){
-        super(PersonID, PersonName);
+    public Student(String PersonName, String PersonID, String program){
+        super(PersonName, PersonID);
         this.program = program;
     }
 

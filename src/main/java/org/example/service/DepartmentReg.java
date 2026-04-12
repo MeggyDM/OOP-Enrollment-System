@@ -1,9 +1,11 @@
 package org.example.service;
+import org.example.model.*;
+import java.util.*;
 
 public interface DepartmentReg {
-    //public interface DepartmentReg{
-    //void save(department department)
-    //List<dpartment> displayAll();
+
+    void save(Department department);
+    List<Department> displayAll();
 
 
 }
