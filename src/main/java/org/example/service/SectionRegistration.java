@@ -40,11 +40,12 @@ public class SectionRegistration implements SectionReg {
         Section foundSection = findBySectionName(sectionName);
 
         if (foundSection != null) {
-            if (foundSection.getStudentList().size() < 30) {
+            if (foundSection.getStudentList().size() < foundSection.getMaxCapacity()) {
                 foundSection.getStudentList().add(student);
                 System.out.println("Student " + student.getPersonName() + " enrolled in " + sectionName);
             } else {
-                System.out.println("Cannot enroll: " + sectionName + " has reached the 30-student limit.");
+                System.out.println("CRITICAL ERROR: " + sectionName + " is FULL (Capacity: " +
+                        foundSection.getMaxCapacity() + ")");
             }
         } else {
             System.out.println("Section not found!");

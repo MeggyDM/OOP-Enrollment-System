@@ -15,7 +15,11 @@ public class StudentRegistration extends Person implements StudentReg {
     //add
     @Override
     public void saveStudent(Student student) {
-        studentList.add(student);
+        if (findByID(student.getPersonID()) == null) {
+            studentList.add(student);
+        } else {
+            System.out.println("Error: Student ID " + student.getPersonID() + " already exists!");
+        }
     }
 
     //display
@@ -39,6 +43,10 @@ public class StudentRegistration extends Person implements StudentReg {
             }
         }
         return null;
+    }
+
+    public ArrayList<Student> getStudentList() {
+        return studentList;
     }
 
     //update

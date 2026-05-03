@@ -1,51 +1,63 @@
 package org.example.service;
-import java.util.*;
-import org.example.model.Course;
-import org.example.model.Person;
 
-public class CourseRegistration extends Person implements CourseReg{
+import org.example.model.Course;
+import java.util.ArrayList;
+import java.util.List;
+
+public class CourseRegistration implements CourseReg {
     private ArrayList<Course> courseList = new ArrayList<>();
 
-    //add
     @Override
-    public void save(Course course){
+    public void save(Course course) {
         courseList.add(course);
+        System.out.println("System: Course " + course.getCourseName() + " has been registered.");
     }
 
-    //display
-    public void displayAll(){
+    @Override
+    public void displayAll(double pricePerUnit) {
+        if (courseList.isEmpty()) {
+            System.out.println("No courses registered in the system.");
+            return;
+        }
+        System.out.println("\n--- Available Courses ---");
         for (Course c : courseList) {
-            System.out.println("Course ID: " + c.getPersonID());
-            System.out.println("Course Name: " + c.getPersonName());
-            System.out.println("Program: " + c.getCourseProgram() + "\n");
+            double totalCost = c.getUnits() * pricePerUnit;
+            System.out.println("ID: " + c.getCourseID() +
+                    " | Name: " + c.getCourseName() +
+                    " | Units: " + c.getUnits() +
+                    " | Tuition: PHP " + totalCost);
         }
     }
 
-    //update
     @Override
-    public void updateCourse(Course course){
-        for (int i=0; i<courseList.size(); i++){
-            if (courseList.get(i).getPersonID()==course.getPersonID()){
-                courseList.set(i, course);
-                break;
+    public void updateCourse(Course updatedCourse) {
+        for (int i = 0; i < courseList.size(); i++) {
+            if (courseList.get(i).getCourseID().equalsIgnoreCase(updatedCourse.getCourseID())) {
+                courseList.set(i, updatedCourse);
+                System.out.println("System: Course " + updatedCourse.getCourseID() + " updated.");
+                return;
             }
         }
+        System.out.println("Error: Course ID not found.");
     }
 
-    //remove
     @Override
-    public void removeCourse(Course course){
-        for (int i=0; i<courseList.size();i++){
-            if (courseList.get(i).getPersonID()==course.getPersonID()){
-                courseList.remove(i);
-                break;
-            }
+    public void removeCourse(String courseID) {
+        boolean removed = courseList.removeIf(c -> c.getCourseID().equalsIgnoreCase(courseID));
+        if (removed) {
+            System.out.println("System: Course " + courseID + " removed.");
+        } else {
+            System.out.println("Error: Course ID not found.");
         }
     }
 
-
     @Override
-    public void mainTask() {
-        System.out.println("Registers courses");
+    public Course findByID(String id) {
+        for (Course c : courseList) {
+            if (c.getCourseID().equalsIgnoreCase(id)) {
+                return c;
+            }
+        }
+        return null;
     }
 }

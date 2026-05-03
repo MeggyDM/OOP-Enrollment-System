@@ -3,36 +3,29 @@ package org.example.service;
 import org.example.model.*;
 import java.util.*;
 
-
 public class DepartmentRegistration implements DepartmentReg {
-    List<Department> departments;
-    List<Instructor> instructors;
-    List<Section> sections;
+    private List<Department> departments;
 
-
-    public DepartmentRegistration(){
+    public DepartmentRegistration() {
         this.departments = new ArrayList<>();
-        this.instructors = new ArrayList<>();
-        this.sections = new ArrayList<>();
     }
 
-    public void save(Department department){
+    @Override
+    public void save(Department department) {
+
+        if (department.getInstructorList() == null) {
+            department.setInstructorList(new ArrayList<>());
+        }
+        if (department.getSectionList() == null) {
+            department.setSectionList(new ArrayList<>());
+        }
+
         departments.add(department);
-
-        for (Instructor inst : department.getInstructorList()) {
-            instructors.add(inst);
-        }
-
-        for (Section sec : department.getSectionList()) {
-            sections.add(sec);
-        }
-
         System.out.println("Successfully saved " + department.getDepartmentName());
     }
 
+    @Override
     public List<Department> displayAll() {
-        System.out.println("Displaying " + this.departments.size() + " departments.");
         return this.departments;
     }
-
 }

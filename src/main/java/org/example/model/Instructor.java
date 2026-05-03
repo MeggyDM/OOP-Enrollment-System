@@ -13,7 +13,7 @@ public class Instructor extends Person{
         return courses;
     }
 
-    public void setCourse(String courses){
+    public void setCourses(String courses){
         this.courses = courses;
     }
 
