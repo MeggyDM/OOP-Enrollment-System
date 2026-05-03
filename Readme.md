@@ -1,8 +1,91 @@
-# OOP Enrollment System
+# Java OOP Enrollment System
+**Author:** Meg De Mesa  
+**Course:** Integrative Programming - Object-Oriented Programming (Finals)
 
-- - -
+---
 
-Author : Meg De Mesa
+## Project Overview
+This is a comprehensive, console-based Enrollment System designed with a **Service-Oriented Architecture**. 
+The system handles complex relationships between Departments, Courses, Sections, Instructors, and Students while 
+maintaining high data integrity and robust business logic with separation of concerns.
+
+### Key Features
+* **Multi-Level Institutional Hierarchy:** Visualizes a real-world academic structure: `Department -> Section -> Instructor -> Enrolled Students`.
+* **Dynamic Tuition Management:** Automatically calculates tuition fees based on course units and manages real-time payment processing with status tracking (ex., `FULLY PAID`).
+* **Reference-Based Persistence:** Implements advanced object referencing, ensuring that student updates (like name changes) reflect instantly across all enrolled sections.
+* **Smart Validation:** * **Capacity Guard:** Prevents enrollment in sections that have reached their maximum student limit.
+    * **Duplicate Prevention:** Blocks the registration of duplicate Student or Instructor IDs.
+    * **Input Protection:** Utilizes `Try-Catch` blocks to handle invalid user inputs (e.g., entering text into numeric fields) without crashing.
+
+---
+
+## Strengths & Bonus Features (Phase 1, 2 & 4)
+
+### 1. Decoupled Interface-Driven Design (separation of concerns)
+The system strictly follows the requirement of separating data from logic. Every operation is defined in an 
+**Interface** (e.g., `IEnrollmentService`, `IStudentService`) and implemented in concrete classes, allowing for 
+high modularity and clean code.
+
+### 2. Service-Oriented Logic
+* **Registrar & HR Controllers:** Act as the main orchestration layer for coordinating multiple services.
+* **TuitionRegistration:** Dedicated service for financial calculations, credit handling, and status updates.
+* **EnrollmentServiceImpl:** Manages the complex tree structure and depth-first traversal for hierarchy viewing.
+
+### 3. Advanced Input Validation (Bonus Feature)
+To avoid crashing while the program runs, the system is fortified with `Try-Catch` blocks. This prevents 
+"Input Mismatch" crashes (ex. a user entering a string where a number is expected). The system catches these 
+exceptions, clears the scanner buffer, and prompts the user to try again, ensuring a professional and "crash-proof" 
+user experience.
+
+### 4. Dynamic Object Reference Persistence (Bonus Logic)
+The system demonstrates a deep understanding of memory management. By using object references instead of static 
+strings, any update made to a student (like name change or program shift) or a course (ex. unit revision) updates 
+**globally and instantly** across all departments, sections, and hierarchy views without requiring manual 
+synchronization.
+
+### 5. Git Mastery & Professional Workflow
+The project follows professional version control standards, including:
+* **Conventional Commits:** Clear, structured commit messages tracking feature development and bug fixes.
+* **Branching Strategy:** Systematic development of features through organized Git history, proving a high level of 
+* technical discipline.
+
+---
+
+## Quality Assurance (JUnit 5)
+To ensure the reliability of the business logic, the following **Automated Unit Tests** were implemented using the 
+**AAA (Arrange, Act, Assert)** pattern. This proves the system meets the "Robust Business Logic" criteria.
+
+1.  **Capacity Test:** Verifies that students are rejected when a section is full.
+2.  **Duplicate ID Test:** Ensures data integrity by blocking identical Student IDs.
+3.  **Tuition Math Test:** Validates unit-to-fee calculations and discount logic.
+4.  **Payment Logic Test:** Confirms balances update correctly and handle overpayments (credits).
+5.  **Instructor Assignment:** Proves that section objects correctly update their assigned personnel.
+
+> **![enrollmentserviceimpl test.png](src/main/resources/images/enrollmentserviceimpl%20test.png)**
+> **Test:** Capacity Rule
+> Verifies that students are rejected when a section has reached its maximum capacity.
+
+> **![CourseRegistration test.png](src/main/resources/images/CourseRegistration%20test.png)**
+> **Test:** CRUD Consistency;
+> Ensures that if you change a course's units in the registration service, the object itself is updated.
+
+> ** ![InstructorRegistration test.png](src/main/resources/images/InstructorRegistration%20test.png)**
+> **Test:** tests the assignment logic;
+> proves that when you assign a teacher, the Section actually hears it
+
+> ** ![StudentRegistration test.png](src/main/resources/images/StudentRegistration%20test.png)**
+> **Test:** tests data integrity; 
+> ensures one can't have two students with the same ID; 
+> ensures student is saved correctly; 
+> ensure the removal logic is done right
+
+> ** ![TuitionRegistration test.png](src/main/resources/images/TuitionRegistration%20test.png)**
+> **Test:** proves the logic handles scenarios where a student pays more than they owe
+
+---
+
+## Progress Screenshots
+*The following screenshots represent the developmental journey and core OOP concepts applied throughout the semester.*
 
 ## **Encapsulation**
 
@@ -43,4 +126,9 @@ Student Registration interface
 ![Screenshot 2026-04-09 at 9.27.13 PM.png](src/main/resources/images/Screenshot%202026-04-09%20at%209.27.13%E2%80%AFPM.png)
 
 Course Registration interface
-![Screenshot 2026-04-09 at 9.28.16 PM.png](src/main/resources/images/Screenshot%202026-04-09%20at%209.28.16%E2%80%AFPM.png)
+![Screenshot 2026-04-09 at 9.28.16 PM.png](src/main/resources/images/Screenshot%202026-04-09%20at%209.28.16%E2%80%AFPM.png)_
+
+## **Polymorphism**
+The Registrar interacts with the IEnrollmentService interface, allowing the system to use any implementation of that
+service without changing the Registrar's code
+![polymorphism.png](src/main/resources/images/polymorphism.png)

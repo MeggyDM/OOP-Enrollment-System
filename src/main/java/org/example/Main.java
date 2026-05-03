@@ -6,17 +6,6 @@ import java.util.*;
 
 public class Main {
     public static void main(String[] args) {
-//        TuitionFeePayment tuition = new TuitionFeePayment();
-//        System.out.println(tuition.calculateTuitionFee(3, 0));
-//        tuition.makePayment(2000);
-//
-//        System.out.println(tuition.getBalance());
-//        System.out.println(tuition.isFullyPaid());
-//
-//        Person instructor = new Instructor("13","bro","IT");
-//        instructor.mainTask();
-//
-//        System.out.println(instructor instanceof Person);
 
         //services
         StudentRegistration SR = new StudentRegistration();
@@ -238,7 +227,7 @@ public class Main {
                                     if (registrar.findDeptByName(dName) != null) {
                                         System.out.println("[!] Error: Department '" + dName + "' already exists. Please use a unique name.");
                                     } else {
-                                        nameIsUnique = true; // Break the loop
+                                        nameIsUnique = true;
                                     }
                                 }
 
@@ -334,8 +323,7 @@ public class Main {
                                 System.out.print("Instructor ID: ");
                                 String insID = input.nextLine();
 
-                                // --- NEW: DUPLICATE ID VALIDATION ---
-                                // This uses your equalsIgnoreCase findByID to block "ins-01" if "INS-01" exists
+
                                 if (IR.findByID(insID) != null) {
                                     System.out.println("[!] CRITICAL ERROR: Instructor ID '" + insID + "' is already registered.");
                                     System.out.println("Registration aborted. Please use a unique ID.");
@@ -347,7 +335,7 @@ public class Main {
 
                                 String linkedCourseName = "";
                                 boolean courseFound = false;
-                                boolean cancelled = false; // Added to track if we should skip saving
+                                boolean cancelled = false;
 
                                 while (!courseFound) {
                                     System.out.println("\n--- Master Course List ---");
@@ -359,7 +347,7 @@ public class Main {
                                     if (targetID.equalsIgnoreCase("cancel")) {
                                         System.out.println("Hiring process cancelled by user.");
                                         cancelled = true;
-                                        break; // Breaks the while loop
+                                        break;
                                     }
 
                                     Course foundC = CR.findByID(targetID);
@@ -371,7 +359,6 @@ public class Main {
                                     }
                                 }
 
-                                // Only save if a course was actually found and they didn't hit cancel
                                 if (courseFound && !cancelled) {
                                     Instructor newIns = new Instructor(insName, insID, linkedCourseName);
                                     IR.save(newIns);
@@ -385,7 +372,7 @@ public class Main {
                             case 3:
                                 System.out.print("Enter Instructor ID to update: ");
                                 String upID = input.nextLine();
-                                Instructor toUpdate = IR.findByID(upID); // Should use equalsIgnoreCase internally
+                                Instructor toUpdate = IR.findByID(upID);
 
                                 if (toUpdate != null) {
                                     System.out.println("Updating: " + toUpdate.getPersonName());
@@ -393,7 +380,6 @@ public class Main {
                                     System.out.print("New Name: ");
                                     String newName = input.nextLine();
 
-                                    // NEW COURSE VERIFICATION
                                     String newCourseName = "";
                                     while (true) {
                                         System.out.print("New Course (Enter Valid Course ID): ");
@@ -407,7 +393,6 @@ public class Main {
                                         System.out.println("[!] Error: '" + targetCID + "' is not a valid Course ID.");
                                     }
 
-                                    // Apply Updates (Keep the same ID)
                                     toUpdate.setPersonName(newName);
                                     toUpdate.setCourses(newCourseName);
 
@@ -424,7 +409,6 @@ public class Main {
                             case 5:
                                 System.out.println("\n--- Assign Instructor to Section ---");
 
-                                // 1. Get and show instructors
                                 List<Instructor> insList = IR.displayAll();
                                 if (insList.isEmpty()) break;
 
