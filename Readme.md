@@ -18,6 +18,29 @@ maintaining high data integrity and robust business logic with separation of con
     * **Input Protection:** Utilizes `Try-Catch` blocks to handle invalid user inputs (e.g., entering text into numeric fields) without crashing.
 
 ---
+## Recommended Execution Flow
+To experience the system’s full functionality and object-linking logic, please follow this sequence in the 
+**Campus Portal**:
+
+### **Step 1: Setup Foundation (Registrar Portal)**
+1.  **[Option 10] Create Department:** Start by creating a department (ex. "CITE").
+2.  **[Option 11] Create Course:** Add a course (ex. "CS101", "Java Programming", 3 units).
+3.  **[Option 1] Save Student:** Register a few students to the database.
+
+### **Step 2: Human Resources (HR Portal)**
+1.  **[Option 1] Hire Instructor:** Create an instructor. The system will prompt you to link them to a Course 
+created in Step 1.
+
+### **Step 3: Object Linking (Registrar Portal)**
+1.  **[Option 5] Create Section:** Name the section (ex. "IT1A") and select the **Department, Course, and Instructor** 
+you created. This "glues" the entities together.
+2.  **[Option 6] Enroll Student:** Now that a section is properly linked, you can enroll students. This will 
+automatically trigger tuition calculation.
+
+### **Step 4: Verification & Logic Testing**
+1.  **[Option 9] Display Hierarchy:** View the institutional tree to confirm all relationships are correctly mapped.
+2.  **[Option 7/8] Finance Logic:** Check student balances and process payments to test the business math.
+---
 
 ## Strengths & Bonus Features (Phase 1, 2 & 4)
 
