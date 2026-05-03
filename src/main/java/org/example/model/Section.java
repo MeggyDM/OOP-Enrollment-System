@@ -5,14 +5,18 @@ import java.util.*;
 
 public class Section {
     private String sectionName;
+    private int maxCapacity;
     private Instructor instructorInCharge;
     private List<Student> studentList;
 
-    public Section(String sectionName, Instructor instructorInCharge, List<Student> studentList) {
+    public Section(String sectionName, int maxCapacity, Instructor instructorInCharge, List<Student> studentList) {
         this.sectionName = sectionName;
+        this.maxCapacity = maxCapacity;
         this.instructorInCharge = instructorInCharge;
-        this.studentList = studentList;
+        this.studentList = studentList != null ? studentList : new ArrayList<>();
     }
+
+
 
     public String getSectionName() {
         return sectionName;
