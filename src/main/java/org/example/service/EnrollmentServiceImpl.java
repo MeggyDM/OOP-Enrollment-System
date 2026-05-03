@@ -31,14 +31,11 @@ public class EnrollmentServiceImpl implements IEnrollmentService {
             }
 
             for (Section sec : dept.getSectionList()) {
-                // 1. LIVE Instructor Info
                 String insName = (sec.getInstructorInCharge() != null) ?
                         sec.getInstructorInCharge().getPersonName() : "TBA";
 
                 System.out.println("   └── Section: " + sec.getSectionName() + " | Instructor: " + insName);
 
-                // 2. LIVE Course Info (This is the critical fix!)
-                // We reach into the Section's 'course' object to get the current name
                 if (sec.getCourse() != null) {
                     System.out.println("       Course: " + sec.getCourse().getCourseName() +
                             " (" + sec.getCourse().getCourseID() + ")");
@@ -46,7 +43,6 @@ public class EnrollmentServiceImpl implements IEnrollmentService {
                     System.out.println("       Course: No Course Assigned");
                 }
 
-                // 3. Student List Display
                 if (sec.getStudentList().isEmpty()) {
                     System.out.println("       └── (No students enrolled)");
                 } else {

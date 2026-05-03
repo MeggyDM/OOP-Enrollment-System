@@ -66,11 +66,10 @@ public class SectionRegistration implements SectionReg {
     @Override
     public void deleteSection(String sectionName) {
         for (int i = 0; i < sections.size(); i++) {
-            // Check if the current section's name matches what we want to delete
             if (sections.get(i).getSectionName().equalsIgnoreCase(sectionName)) {
                 sections.remove(i);
                 System.out.println("Section " + sectionName + " has been deleted.");
-                return; // Stop the loop once we find and delete it
+                return;
             }
         }
         System.out.println("Delete failed. Section not found.");
