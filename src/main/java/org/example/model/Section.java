@@ -16,6 +16,14 @@ public class Section {
         this.studentList = studentList != null ? studentList : new ArrayList<>();
     }
 
+    public int getMaxCapacity() {
+        return maxCapacity;
+    }
+
+    public void setMaxCapacity(int maxCapacity) {
+        this.maxCapacity = maxCapacity;
+    }
+
 
 
     public String getSectionName() {

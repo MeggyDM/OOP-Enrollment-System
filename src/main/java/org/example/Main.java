@@ -24,9 +24,11 @@ public class Main {
         DepartmentRegistration DR = new DepartmentRegistration();
         SectionRegistration SRS = new SectionRegistration();
         InstructorRegistration IR = new InstructorRegistration();
+        TuitionRegistration TR = new TuitionRegistration();
+        IEnrollmentService ES = new EnrollmentServiceImpl();
 
         //controllers
-        Registrar registrar = new Registrar(SR, CR, DR, SRS);
+        Registrar registrar = new Registrar(SR, CR, DR, SRS, TR, ES);
         HR hr = new HR(IR);
 
         Scanner input = new Scanner(System.in);
@@ -52,7 +54,8 @@ public class Main {
                     System.out.println("\n===WELCOME TO THE REGISTRAR PORTAL===");
                     System.out.println("[1] Save Student\n[2] Display All Students\n[3] Update Student\n[4] Remove" +
                             "Student\n[5] Create Section\n" +
-                            "[6] Enroll Student in Section\n[7] Back to Main");
+                            "[6] Enroll Student in Section\n[7] Check Balance\n[8] Make Payment\n[9] Display Hierarchy"
+                            + "\n[10] Back to Main");
                     System.out.print("Select Option: ");
                     int regOption = input.nextInt();
                     input.nextLine();
@@ -101,36 +104,46 @@ public class Main {
                         case 5:
                             System.out.print("New Section Name: ");
                             String newSection = input.nextLine();
-                            registrar.saveSection(new Section(newSection, null, new ArrayList<>()));
+
+                            System.out.println("Enter Max Capacity for this section: ");
+                            int cap = input.nextInt();
+                            input.nextLine();
+
+                            registrar.saveSection(new Section(newSection, cap, null, new ArrayList<>()));
                             break;
                         case 6:
                             System.out.print("Enter Section Name for Enrollment: ");
                             String secName = input.nextLine();
-
                             Section foundSec = SRS.findBySectionName(secName);
 
-                            if (foundSec == null){
+                            if (foundSec == null) {
                                 System.out.println("Section " + secName + " not found!");
                                 System.out.print("Would you like to create one now? (y/n): ");
                                 String ans = input.nextLine();
 
-                                if (ans.equalsIgnoreCase("y")){
-                                    registrar.saveSection(new Section(secName, null, new ArrayList<>()));
+                                if (ans.equalsIgnoreCase("y")) {
+                                    System.out.println("Enter Max Capacity for " + secName + ": ");
+                                    int cap2 = input.nextInt();
+                                    input.nextLine();
+                                    registrar.saveSection(new Section(secName, cap2, null, new ArrayList<>()));
                                     System.out.println("Section successfully created! Please enroll again!");
                                 }
                             } else {
-                                boolean enrollDone = false;
+                                if (foundSec.getStudentList().size() >= foundSec.getMaxCapacity()) {
+                                    System.out.println("CRITICAL ERROR: " + secName + " is already FULL (Capacity: " + foundSec.getMaxCapacity() + ")");
+                                    break;
+                                }
 
+                                boolean enrollDone = false;
                                 while (!enrollDone) {
                                     System.out.print("\nEnter Student ID to enroll: ");
                                     String sID = input.nextLine();
-
                                     Student record = SR.findByID(sID);
 
                                     if (record == null) {
                                         System.out.println("Student ID " + sID + " is not registered in the system!");
                                         System.out.print("Try a different ID? (y/n): ");
-                                        if (input.nextLine().equalsIgnoreCase("n")){
+                                        if (input.nextLine().equalsIgnoreCase("n")) {
                                             break;
                                         }
                                         continue;
@@ -139,26 +152,44 @@ public class Main {
                                     System.out.print("Enter Student Name: ");
                                     String sName = input.nextLine();
                                     if (!sName.equalsIgnoreCase(record.getPersonName())) {
-                                        System.out.println("Name does not match the records for ID " + sID + ". Please " +
-                                                "check for typos.");
+                                        System.out.println("Name does not match the records for ID " + sID + ". Please check for typos.");
                                         continue;
                                     }
 
-                                    // 3. Validate Program (Matches the record)
                                     System.out.print("Enter Student Program: ");
                                     String sProg = input.nextLine();
                                     if (!sProg.equalsIgnoreCase(record.getProgram())) {
-                                        System.out.println("Program does not match the records for ID " + sID + ". Please " +
-                                                "check for typos.");
+                                        System.out.println("Program does not match the records for ID " + sID + ". Please check for typos.");
                                         continue;
                                     }
 
-                                    registrar.enrollStudent(secName, new Student(sName, sID, sProg));
+                                    System.out.print("Enter number of units for this section: ");
+                                    int units = input.nextInt();
+                                    input.nextLine();
+
+                                    registrar.calculateAndSetTuition(record, units);
+                                    registrar.enrollStudent(foundSec, record);
                                     enrollDone = true;
                                 }
                             }
                             break;
                         case 7:
+                            System.out.print("Enter Student ID to check balance: ");
+                            String checkID = input.nextLine();
+                            registrar.checkStudentBalance(checkID);
+                            break;
+                        case 8:
+                            System.out.print("Enter Student ID: ");
+                            String payID = input.nextLine();
+                            System.out.print("Enter payment amount: ");
+                            double amount = input.nextDouble();
+                            input.nextLine();
+                            registrar.processStudentPayment(payID, amount);
+                            break;
+                        case 9:
+                            registrar.displayHierarchy();
+                            break;
+                        case 10:
                             regLoop = false;
                             break;
 
@@ -201,7 +232,7 @@ public class Main {
                                 String un = input.nextLine();
                                 System.out.print("New Course: ");
                                 String uc = input.nextLine();
-                                hr.updateInstructorDeets(upID, new Instructor(upID, un, uc));
+                                hr.updateInstructorDeets(upID, new Instructor(un, upID, uc));
                             } else {
                                 System.out.println("Instructor ID not found.");
                             }
