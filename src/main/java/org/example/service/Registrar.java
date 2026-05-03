@@ -106,9 +106,9 @@ public class Registrar {
         //return "Success!";
     }
 
-    public void removeCourse(Course course){
+    public void removeCourse(String course){
         courseReg.removeCourse(course);
-        //return "Success!";
+
     }
 
     public void saveSection(Section section){

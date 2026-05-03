@@ -55,7 +55,7 @@ public class Main {
                     System.out.println("[1] Save Student\n[2] Display All Students\n[3] Update Student\n[4] Remove" +
                             "Student\n[5] Create Section\n" +
                             "[6] Enroll Student in Section\n[7] Check Balance\n[8] Make Payment\n[9] Display Hierarchy"
-                            + "\n[10] Back to Main");
+                            + "\n[10] Create Department\n[11] Back to Main");
                     System.out.print("Select Option: ");
                     int regOption = input.nextInt();
                     input.nextLine();
@@ -105,11 +105,51 @@ public class Main {
                             System.out.print("New Section Name: ");
                             String newSection = input.nextLine();
 
-                            System.out.println("Enter Max Capacity for this section: ");
+                            System.out.print("Enter Max Capacity: ");
                             int cap = input.nextInt();
                             input.nextLine();
 
-                            registrar.saveSection(new Section(newSection, cap, null, new ArrayList<>()));
+                            Section s = new Section(newSection, cap, null, new ArrayList<>());
+
+                            System.out.println("\n--- Available Courses ---");
+                            registrar.displayAll(); // calls courseReg.displayAll()
+                            System.out.print("Enter Course ID to assign to this section: ");
+                            String cID = input.nextLine();
+                            Course foundC = CR.findByID(cID);
+
+                            if (foundC != null) {
+                                s.setCourse(foundC);
+                                System.out.println("Section linked to Course: " + foundC.getCourseName());
+                            } else {
+                                System.out.println("Course not found. Section created without a linked course.");
+                            }
+
+                            registrar.saveSection(s);
+
+                            System.out.println("\n--- Available Departments ---");
+                            for (Department dpt : DR.displayAll()) {
+                                System.out.println("- " + dpt.getDepartmentName());
+                            }
+
+                            System.out.print("Enter Department Name to link this section to: ");
+                            String linkDept = input.nextLine();
+
+                            List<Department> allDepts = DR.displayAll();
+                            Department d = null;
+
+                            for (Department dept : allDepts) {
+                                if (dept.getDepartmentName().equalsIgnoreCase(linkDept)) {
+                                    d = dept;
+                                    break;
+                                }
+                            }
+
+                            if (d != null) {
+                                d.getSectionList().add(s);
+                                System.out.println("Section " + newSection + " successfully linked to " + linkDept + "!");
+                            } else {
+                                System.out.println("Department not found. Section created but remains unassigned to a hierarchy.");
+                            }
                             break;
                         case 6:
                             System.out.print("Enter Section Name for Enrollment: ");
@@ -122,7 +162,7 @@ public class Main {
                                 String ans = input.nextLine();
 
                                 if (ans.equalsIgnoreCase("y")) {
-                                    System.out.println("Enter Max Capacity for " + secName + ": ");
+                                    System.out.print("Enter Max Capacity for " + secName + ": ");
                                     int cap2 = input.nextInt();
                                     input.nextLine();
                                     registrar.saveSection(new Section(secName, cap2, null, new ArrayList<>()));
@@ -152,22 +192,31 @@ public class Main {
                                     System.out.print("Enter Student Name: ");
                                     String sName = input.nextLine();
                                     if (!sName.equalsIgnoreCase(record.getPersonName())) {
-                                        System.out.println("Name does not match the records for ID " + sID + ". Please check for typos.");
+                                        System.out.println("Name does not match the records. Please check typos.");
                                         continue;
                                     }
 
                                     System.out.print("Enter Student Program: ");
                                     String sProg = input.nextLine();
                                     if (!sProg.equalsIgnoreCase(record.getProgram())) {
-                                        System.out.println("Program does not match the records for ID " + sID + ". Please check for typos.");
+                                        System.out.println("Program does not match the records. Please check typos.");
                                         continue;
                                     }
 
-                                    System.out.print("Enter number of units for this section: ");
-                                    int units = input.nextInt();
-                                    input.nextLine();
+                                    // tuition logic
+                                    int finalUnits;
+                                    if (foundSec.getCourse() != null) {
+                                        finalUnits = foundSec.getCourse().getUnits();
+                                        System.out.println("Course Detected: " + foundSec.getCourse().getCourseName());
+                                        System.out.println("Automatic Units: " + finalUnits);
+                                    } else {
+                                        System.out.println("Warning: No Course linked to this section.");
+                                        System.out.print("Enter units manually: ");
+                                        finalUnits = input.nextInt();
+                                        input.nextLine();
+                                    }
 
-                                    registrar.calculateAndSetTuition(record, units);
+                                    registrar.calculateAndSetTuition(record, finalUnits);
                                     registrar.enrollStudent(foundSec, record);
                                     enrollDone = true;
                                 }
@@ -190,8 +239,21 @@ public class Main {
                             registrar.displayHierarchy();
                             break;
                         case 10:
+                            System.out.print("Enter Department ID: ");
+                            String dID = input.nextLine();
+                            System.out.print("Enter Department Name: ");
+                            String dName = input.nextLine();
+
+                            // new department with empty lists for sections & instructors
+                            Department newDept = new Department(dID, dName, new ArrayList<>(), new ArrayList<>());
+                            registrar.saveDept(newDept);
+                            System.out.println("Department " + dName + " created successfully!");
+                            break;
+                        case 11:
                             regLoop = false;
                             break;
+
+
 
                     }
 
@@ -202,7 +264,7 @@ public class Main {
                 while (hrLoop){
                     System.out.println("\n===WELCOME TO THE HR PORTAL===");
                     System.out.println("[1] Hire Instructors\n[2] Display All Intructors\n[3] Update Instructor\n[4] " +
-                                    "Remove Instructor\n[5] Back to Main\n");
+                                    "Remove Instructor\n[5] Assign Instructor to Section\n[6] Back to Main");
                     System.out.print("Select Option: ");
                     int hrOption = input.nextInt();
                     input.nextLine();
@@ -243,6 +305,39 @@ public class Main {
                             hr.removeInstructor(deleteID);
                             break;
                         case 5:
+                            System.out.println("\n--- Assign Instructor to Section ---");
+
+                            // 1. Get and show instructors
+                            List<Instructor> insList = IR.displayAll();
+                            if (insList.isEmpty()) break;
+
+                            System.out.print("Enter Instructor ID: ");
+                            String targetID = input.nextLine();
+                            Instructor selectedIns = IR.findByID(targetID);
+
+                            if (selectedIns == null) {
+                                System.out.println("Instructor not found!");
+                                break;
+                            }
+
+                            List<Section> secList = SRS.displayAll();
+                            if (secList.isEmpty()) {
+                                System.out.println("No sections available to assign to.");
+                                break;
+                            }
+
+                            System.out.print("Enter Section Name: ");
+                            String targetSec = input.nextLine();
+                            Section selectedSec = SRS.findBySectionName(targetSec);
+
+                            if (selectedSec == null) {
+                                System.out.println("Section not found!");
+                                break;
+                            }
+
+                            IR.assignInstructorToSection(selectedIns, selectedSec);
+                            break;
+                        case 6:
                             hrLoop = false;
                             break;
 

@@ -30,20 +30,23 @@ public class EnrollmentServiceImpl implements IEnrollmentService {
         for (Department dept : departments) {
             System.out.println("\nDepartment: " + dept.getDepartmentName());
 
-            // Check sections
             List<Section> sections = dept.getSectionList();
             if (sections == null || sections.isEmpty()) {
                 System.out.println("   └── (No sections assigned)");
             } else {
                 for (Section sec : sections) {
-                    // Safely get instructor name
                     String instructorName = (sec.getInstructorInCharge() != null)
                             ? sec.getInstructorInCharge().getPersonName()
                             : "No Instructor Assigned";
 
-                    System.out.println("   └── Section: " + sec.getSectionName() + " | Instructor: " + instructorName);
 
-                    // Check students
+                    String courseInfo = (sec.getCourse() != null)
+                            ? sec.getCourse().getCourseName() + " (" + sec.getCourse().getCourseID() + ")"
+                            : "No Course Linked";
+
+                    System.out.println("   └── Section: " + sec.getSectionName() + " | Instructor: " + instructorName);
+                    System.out.println("       Course: " + courseInfo);
+
                     if (sec.getStudentList() == null || sec.getStudentList().isEmpty()) {
                         System.out.println("       └── [No Students Enrolled]");
                     } else {

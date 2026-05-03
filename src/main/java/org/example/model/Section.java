@@ -8,6 +8,7 @@ public class Section {
     private int maxCapacity;
     private Instructor instructorInCharge;
     private List<Student> studentList;
+    private Course course;
 
     public Section(String sectionName, int maxCapacity, Instructor instructorInCharge, List<Student> studentList) {
         this.sectionName = sectionName;
@@ -24,6 +25,13 @@ public class Section {
         this.maxCapacity = maxCapacity;
     }
 
+    public Course getCourse() {
+        return course;
+    }
+
+    public void setCourse(Course course) {
+        this.course = course;
+    }
 
 
     public String getSectionName() {
@@ -52,7 +60,7 @@ public class Section {
 
     public void displaySection() {
         System.out.println("Section: " + sectionName);
-        System.out.println("Instructor: " + instructorInCharge.getPersonName());
+        System.out.println("Instructor: " + (instructorInCharge != null ? instructorInCharge.getPersonName() : "TBA"));
         System.out.println("Total Students: " + studentList.size());
         System.out.println("Student List: " + studentList + "\n");
     }

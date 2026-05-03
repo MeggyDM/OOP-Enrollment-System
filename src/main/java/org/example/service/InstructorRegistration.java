@@ -1,6 +1,8 @@
 package org.example.service;
 
 import org.example.model.Instructor;
+import org.example.model.Section;
+
 import java.util.*;
 
 public class InstructorRegistration implements InstructorReg {
@@ -13,15 +15,14 @@ public class InstructorRegistration implements InstructorReg {
     }
 
     @Override
-    public void displayAll() {
+    public List<Instructor> displayAll() {
         if (instructors.isEmpty()) {
             System.out.println("No instructors found.");
         }
         for (Instructor i : instructors) {
-            System.out.println("\nInstructor Name: " + i.getPersonName());
-            System.out.println("Instructor ID:   " + i.getPersonID());
-            System.out.println("Courses:         " + i.getCourse() + "\n");
+            System.out.println("ID: " + i.getPersonID() + " | Name: " + i.getPersonName());
         }
+        return instructors;
     }
 
     @Override
@@ -55,5 +56,11 @@ public class InstructorRegistration implements InstructorReg {
             }
         }
         System.out.println("ID not found.");
+    }
+
+    @Override
+    public void assignInstructorToSection(Instructor instructor, Section section) {
+        section.setInstructorInCharge(instructor);
+        System.out.println("Success: " + instructor.getPersonName() + " assigned to " + section.getSectionName());
     }
 }
