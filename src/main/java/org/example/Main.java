@@ -55,7 +55,8 @@ public class Main {
                     System.out.println("[1] Save Student\n[2] Display All Students\n[3] Update Student\n[4] Remove" +
                             "Student\n[5] Create Section\n" +
                             "[6] Enroll Student in Section\n[7] Check Balance\n[8] Make Payment\n[9] Display Hierarchy"
-                            + "\n[10] Create Department\n[11] Back to Main");
+                            + "\n[10] Create Department\n[11] Create Course\n[12] Update Course\n[13] Remove Course\n" +
+                            "[14] Display Courses\n[15] Back to Main");
                     System.out.print("Select Option: ");
                     int regOption = input.nextInt();
                     input.nextLine();
@@ -102,72 +103,55 @@ public class Main {
                             break;
 
                         case 5:
+                            System.out.println("\n--- Create New Section ---");
                             System.out.print("New Section Name: ");
-                            String newSection = input.nextLine();
-
+                            String newSecName = input.nextLine();
                             System.out.print("Enter Max Capacity: ");
-                            int cap = input.nextInt();
+                            int maxCap = input.nextInt();
                             input.nextLine();
 
-                            Section s = new Section(newSection, cap, null, new ArrayList<>());
+                            Instructor selIns = null;
+                            Course selCourse = null;
+                            Department selDept = null;
 
-                            System.out.println("\n--- Available Courses ---");
-                            registrar.displayAll(); // calls courseReg.displayAll()
-                            System.out.print("Enter Course ID to assign to this section: ");
-                            String cID = input.nextLine();
-                            Course foundC = CR.findByID(cID);
-
-                            if (foundC != null) {
-                                s.setCourse(foundC);
-                                System.out.println("Section linked to Course: " + foundC.getCourseName());
-                            } else {
-                                System.out.println("Course not found. Section created without a linked course.");
+                            while (selIns == null) {
+                                IR.displayAll();
+                                System.out.print("Enter Instructor ID: ");
+                                selIns = IR.findByID(input.nextLine());
+                                if (selIns == null) System.out.println("Invalid ID. Try again.");
                             }
 
-                            registrar.saveSection(s);
-
-                            System.out.println("\n--- Available Departments ---");
-                            for (Department dpt : DR.displayAll()) {
-                                System.out.println("- " + dpt.getDepartmentName());
+                            while (selCourse == null) {
+                                registrar.displayAll();
+                                System.out.print("Enter Course ID: ");
+                                selCourse = CR.findByID(input.nextLine());
+                                if (selCourse == null) System.out.println("Invalid ID. Try again.");
                             }
 
-                            System.out.print("Enter Department Name to link this section to: ");
-                            String linkDept = input.nextLine();
-
-                            List<Department> allDepts = DR.displayAll();
-                            Department d = null;
-
-                            for (Department dept : allDepts) {
-                                if (dept.getDepartmentName().equalsIgnoreCase(linkDept)) {
-                                    d = dept;
-                                    break;
-                                }
+                            while (selDept == null) {
+                                registrar.displayAllDepts();
+                                System.out.print("Enter Department Name: ");
+                                selDept = registrar.findDeptByName(input.nextLine());
+                                if (selDept == null) System.out.println("Invalid Dept. Try again.");
                             }
 
-                            if (d != null) {
-                                d.getSectionList().add(s);
-                                System.out.println("Section " + newSection + " successfully linked to " + linkDept + "!");
-                            } else {
-                                System.out.println("Department not found. Section created but remains unassigned to a hierarchy.");
-                            }
+                            Section newSec = new Section(newSecName, maxCap, selIns, new ArrayList<>());
+                            newSec.setCourse(selCourse);
+                            selDept.getSectionList().add(newSec);
+
+                            SRS.save(newSec);
+
+                            System.out.println("Section " + newSecName + " saved and linked successfully!");
                             break;
                         case 6:
+                            input.nextLine();
                             System.out.print("Enter Section Name for Enrollment: ");
-                            String secName = input.nextLine();
+                            String secName = input.nextLine().trim();
                             Section foundSec = SRS.findBySectionName(secName);
 
                             if (foundSec == null) {
-                                System.out.println("Section " + secName + " not found!");
-                                System.out.print("Would you like to create one now? (y/n): ");
-                                String ans = input.nextLine();
-
-                                if (ans.equalsIgnoreCase("y")) {
-                                    System.out.print("Enter Max Capacity for " + secName + ": ");
-                                    int cap2 = input.nextInt();
-                                    input.nextLine();
-                                    registrar.saveSection(new Section(secName, cap2, null, new ArrayList<>()));
-                                    System.out.println("Section successfully created! Please enroll again!");
-                                }
+                                System.out.println("Section '" + secName + "' not found!");
+                                System.out.println("Please use Option [5] to create a properly linked Section first.");
                             } else {
                                 if (foundSec.getStudentList().size() >= foundSec.getMaxCapacity()) {
                                     System.out.println("CRITICAL ERROR: " + secName + " is already FULL (Capacity: " + foundSec.getMaxCapacity() + ")");
@@ -177,7 +161,7 @@ public class Main {
                                 boolean enrollDone = false;
                                 while (!enrollDone) {
                                     System.out.print("\nEnter Student ID to enroll: ");
-                                    String sID = input.nextLine();
+                                    String sID = input.nextLine().trim();
                                     Student record = SR.findByID(sID);
 
                                     if (record == null) {
@@ -190,20 +174,19 @@ public class Main {
                                     }
 
                                     System.out.print("Enter Student Name: ");
-                                    String sName = input.nextLine();
+                                    String sName = input.nextLine().trim();
                                     if (!sName.equalsIgnoreCase(record.getPersonName())) {
                                         System.out.println("Name does not match the records. Please check typos.");
                                         continue;
                                     }
 
                                     System.out.print("Enter Student Program: ");
-                                    String sProg = input.nextLine();
+                                    String sProg = input.nextLine().trim();
                                     if (!sProg.equalsIgnoreCase(record.getProgram())) {
                                         System.out.println("Program does not match the records. Please check typos.");
                                         continue;
                                     }
 
-                                    // tuition logic
                                     int finalUnits;
                                     if (foundSec.getCourse() != null) {
                                         finalUnits = foundSec.getCourse().getUnits();
@@ -239,21 +222,92 @@ public class Main {
                             registrar.displayHierarchy();
                             break;
                         case 10:
+                            String dName = "";
+                            boolean nameIsUnique = false;
+
+                            while (!nameIsUnique) {
+                                System.out.print("Enter Department Name: ");
+                                dName = input.nextLine().trim();
+
+                                if (dName.isEmpty()) continue;
+
+                                if (registrar.findDeptByName(dName) != null) {
+                                    System.out.println("[!] Error: Department '" + dName + "' already exists. Please use a unique name.");
+                                } else {
+                                    nameIsUnique = true; // Break the loop
+                                }
+                            }
+
                             System.out.print("Enter Department ID: ");
                             String dID = input.nextLine();
-                            System.out.print("Enter Department Name: ");
-                            String dName = input.nextLine();
 
-                            // new department with empty lists for sections & instructors
                             Department newDept = new Department(dID, dName, new ArrayList<>(), new ArrayList<>());
+
                             registrar.saveDept(newDept);
+
                             System.out.println("Department " + dName + " created successfully!");
                             break;
                         case 11:
+                            System.out.println("\n--- Create New Course ---");
+                            System.out.print("Enter Course ID: ");
+                            String newCID = input.nextLine();
+
+                            if (CR.findByID(newCID) != null) {
+                                System.out.println("[!] ERROR: Course ID '" + newCID + "' already exists in the system!");
+                                System.out.println("Registration cancelled.");
+                                break;
+                            }
+
+                            System.out.print("Enter Course Name: ");
+                            String newCName = input.nextLine();
+                            System.out.print("Enter Program: ");
+                            String newCProg = input.nextLine();
+                            System.out.print("Enter Units: ");
+                            int newCUnits = input.nextInt();
+                            input.nextLine();
+
+                            Course courseObj = new Course(newCID, newCName, newCProg, newCUnits);
+                            CR.save(courseObj);
+                            System.out.println("System: Course " + newCID + " saved successfully.");
+                            break;
+                        case 12:
+                            System.out.println("\n--- Update Existing Course ---");
+                            System.out.print("Enter Course ID to update: ");
+                            String upID = input.nextLine();
+                            Course toUpdate = CR.findByID(upID);
+
+                            if (toUpdate != null) {
+                                System.out.println("Updating Course: " + toUpdate.getCourseName());
+                                System.out.print("Enter New Name: ");
+                                String upName = input.nextLine();
+                                System.out.print("Enter New Program: ");
+                                String upProg = input.nextLine();
+                                System.out.print("Enter New Units: ");
+                                int upUnits = input.nextInt();
+                                input.nextLine();
+
+                                toUpdate.setCourseName(upName);
+                                toUpdate.setCourseProgram(upProg);
+                                toUpdate.setUnits(upUnits);
+
+                                System.out.println("Success: Course details modified in the master record!");
+                            } else {
+                                System.out.println("Error: Course ID [" + upID + "] not found!");
+                            }
+                            break;
+                        case 13:
+                            System.out.println("\n--- Remove Course ---");
+                            System.out.print("Enter Course ID to remove: ");
+                            String remID = input.nextLine();
+                            CR.removeCourse(remID);
+                            break;
+                        case 14:
+                            System.out.println("\n--- Master Course List ---");
+                            registrar.displayAll();
+                            break;
+                        case 15:
                             regLoop = false;
                             break;
-
-
 
                     }
 
@@ -270,16 +324,55 @@ public class Main {
                     input.nextLine();
 
                     switch (hrOption){
+
                         case 1:
+                            System.out.println("\n=== Hire New Instructor ===");
                             System.out.print("Instructor ID: ");
-                            String iID = input.nextLine();
+                            String insID = input.nextLine();
+
+                            // --- NEW: DUPLICATE ID VALIDATION ---
+                            // This uses your equalsIgnoreCase findByID to block "ins-01" if "INS-01" exists
+                            if (IR.findByID(insID) != null) {
+                                System.out.println("[!] CRITICAL ERROR: Instructor ID '" + insID + "' is already registered.");
+                                System.out.println("Registration aborted. Please use a unique ID.");
+                                break;
+                            }
 
                             System.out.print("Instructor Name: ");
-                            String iName = input.nextLine();
+                            String insName = input.nextLine();
 
-                            System.out.print("Instructor Course: ");
-                            String iCourse = input.nextLine();
-                            hr.addInstructor(new Instructor(iName, iID, iCourse));
+                            String linkedCourseName = "";
+                            boolean courseFound = false;
+                            boolean cancelled = false; // Added to track if we should skip saving
+
+                            while (!courseFound) {
+                                System.out.println("\n--- Master Course List ---");
+                                registrar.displayAll();
+
+                                System.out.print("Enter Course ID for this Instructor's Specialization (or type 'cancel'): ");
+                                String targetID = input.nextLine();
+
+                                if (targetID.equalsIgnoreCase("cancel")) {
+                                    System.out.println("Hiring process cancelled by user.");
+                                    cancelled = true;
+                                    break; // Breaks the while loop
+                                }
+
+                                Course foundC = CR.findByID(targetID);
+                                if (foundC != null) {
+                                    linkedCourseName = foundC.getCourseName();
+                                    courseFound = true;
+                                } else {
+                                    System.out.println("[!] Error: Course ID '" + targetID + "' does not exist. Please try again.");
+                                }
+                            }
+
+                            // Only save if a course was actually found and they didn't hit cancel
+                            if (courseFound && !cancelled) {
+                                Instructor newIns = new Instructor(insName, insID, linkedCourseName);
+                                IR.save(newIns);
+                                System.out.println("\nSUCCESS: " + insName + " [" + insID + "] hired for " + linkedCourseName);
+                            }
                             break;
                         case 2:
                             System.out.println("\n===Here's the list of Instructors===");
@@ -288,15 +381,35 @@ public class Main {
                         case 3:
                             System.out.print("Enter Instructor ID to update: ");
                             String upID = input.nextLine();
+                            Instructor toUpdate = IR.findByID(upID); // Should use equalsIgnoreCase internally
 
-                            if (IR.findByID(upID) != null) {
+                            if (toUpdate != null) {
+                                System.out.println("Updating: " + toUpdate.getPersonName());
+
                                 System.out.print("New Name: ");
-                                String un = input.nextLine();
-                                System.out.print("New Course: ");
-                                String uc = input.nextLine();
-                                hr.updateInstructorDeets(upID, new Instructor(un, upID, uc));
+                                String newName = input.nextLine();
+
+                                // NEW COURSE VERIFICATION
+                                String newCourseName = "";
+                                while (true) {
+                                    System.out.print("New Course (Enter Valid Course ID): ");
+                                    String targetCID = input.nextLine();
+                                    Course validC = CR.findByID(targetCID);
+
+                                    if (validC != null) {
+                                        newCourseName = validC.getCourseName();
+                                        break;
+                                    }
+                                    System.out.println("[!] Error: '" + targetCID + "' is not a valid Course ID.");
+                                }
+
+                                // Apply Updates (Keep the same ID)
+                                toUpdate.setPersonName(newName);
+                                toUpdate.setCourses(newCourseName);
+
+                                System.out.println("System: Instructor " + newName + " updated with course " + newCourseName);
                             } else {
-                                System.out.println("Instructor ID not found.");
+                                System.out.println("Error: Instructor ID not found.");
                             }
                             break;
                         case 4:

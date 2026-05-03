@@ -14,20 +14,25 @@ public class CourseRegistration implements CourseReg {
     }
 
     @Override
-    public void displayAll() {
+    public void displayAll(double pricePerUnit) {
         if (courseList.isEmpty()) {
             System.out.println("No courses registered in the system.");
             return;
         }
+        System.out.println("\n--- Available Courses ---");
         for (Course c : courseList) {
-            System.out.println("ID: " + c.getCourseID() + " | Name: " + c.getCourseName() + " | Units: " + c.getUnits());
+            double totalCost = c.getUnits() * pricePerUnit;
+            System.out.println("ID: " + c.getCourseID() +
+                    " | Name: " + c.getCourseName() +
+                    " | Units: " + c.getUnits() +
+                    " | Tuition: PHP " + totalCost);
         }
     }
 
     @Override
     public void updateCourse(Course updatedCourse) {
         for (int i = 0; i < courseList.size(); i++) {
-            if (courseList.get(i).getCourseID().equals(updatedCourse.getCourseID())) {
+            if (courseList.get(i).getCourseID().equalsIgnoreCase(updatedCourse.getCourseID())) {
                 courseList.set(i, updatedCourse);
                 System.out.println("System: Course " + updatedCourse.getCourseID() + " updated.");
                 return;

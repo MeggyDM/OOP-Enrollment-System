@@ -19,40 +19,39 @@ public class EnrollmentServiceImpl implements IEnrollmentService {
     }
 
     @Override
-    public void viewDepartmentHierarchy(List<Department> departments) {
+    public void viewDepartmentHierarchy(List<Department> allDepts) {
         System.out.println("\n========== INSTITUTIONAL HIERARCHY ==========");
 
-        if (departments == null || departments.isEmpty()) {
-            System.out.println("[!] No departments registered in the system.");
-            return;
-        }
-
-        for (Department dept : departments) {
+        for (Department dept : allDepts) {
             System.out.println("\nDepartment: " + dept.getDepartmentName());
 
-            List<Section> sections = dept.getSectionList();
-            if (sections == null || sections.isEmpty()) {
+            if (dept.getSectionList().isEmpty()) {
                 System.out.println("   └── (No sections assigned)");
-            } else {
-                for (Section sec : sections) {
-                    String instructorName = (sec.getInstructorInCharge() != null)
-                            ? sec.getInstructorInCharge().getPersonName()
-                            : "No Instructor Assigned";
+                continue;
+            }
 
+            for (Section sec : dept.getSectionList()) {
+                // 1. LIVE Instructor Info
+                String insName = (sec.getInstructorInCharge() != null) ?
+                        sec.getInstructorInCharge().getPersonName() : "TBA";
 
-                    String courseInfo = (sec.getCourse() != null)
-                            ? sec.getCourse().getCourseName() + " (" + sec.getCourse().getCourseID() + ")"
-                            : "No Course Linked";
+                System.out.println("   └── Section: " + sec.getSectionName() + " | Instructor: " + insName);
 
-                    System.out.println("   └── Section: " + sec.getSectionName() + " | Instructor: " + instructorName);
-                    System.out.println("       Course: " + courseInfo);
+                // 2. LIVE Course Info (This is the critical fix!)
+                // We reach into the Section's 'course' object to get the current name
+                if (sec.getCourse() != null) {
+                    System.out.println("       Course: " + sec.getCourse().getCourseName() +
+                            " (" + sec.getCourse().getCourseID() + ")");
+                } else {
+                    System.out.println("       Course: No Course Assigned");
+                }
 
-                    if (sec.getStudentList() == null || sec.getStudentList().isEmpty()) {
-                        System.out.println("       └── [No Students Enrolled]");
-                    } else {
-                        for (Student s : sec.getStudentList()) {
-                            System.out.println("       └── Student: [" + s.getPersonID() + "] " + s.getPersonName());
-                        }
+                // 3. Student List Display
+                if (sec.getStudentList().isEmpty()) {
+                    System.out.println("       └── (No students enrolled)");
+                } else {
+                    for (Student s : sec.getStudentList()) {
+                        System.out.println("       └── Student: [" + s.getPersonID() + "] " + s.getPersonName());
                     }
                 }
             }

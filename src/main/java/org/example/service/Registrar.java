@@ -11,6 +11,7 @@ public class Registrar {
     private SectionReg sectionReg;
     private TuitionReg tuitionReg;
     private IEnrollmentService enrollmentService;
+    private List<Department> departmentList = new ArrayList<>();
 
     public Registrar(StudentReg studentRegistration, CourseReg courseRegistration, DepartmentReg departmentRegistration
     , SectionReg sectionRegistration, TuitionReg tuitionRegistration, IEnrollmentService enrollmentService) {
@@ -55,9 +56,14 @@ public class Registrar {
 
     public void calculateAndSetTuition(Student s, int units) {
         double fee = tuitionReg.calculateTuitionFee(units, 0);
-        s.getTuitionDetails().setTotalTuitionFee(fee);
-        s.getTuitionDetails().setBalance(fee);
-        System.out.println("Tuition set: PHP " + fee);
+
+        double currentBalance = s.getTuitionDetails().getBalance();
+
+        s.getTuitionDetails().setTotalTuitionFee(currentBalance + fee);
+        s.getTuitionDetails().setBalance(currentBalance + fee);
+
+        System.out.println("New charges added: PHP " + fee);
+        System.out.println("Total updated balance: PHP " + (currentBalance + fee));
     }
 
     public void processPayment(String studentID, double amount) {
@@ -97,8 +103,8 @@ public class Registrar {
     }
 
     public void displayAll(){
-        courseReg.displayAll();
-        //return "Success!";
+        double price = ((TuitionRegistration)tuitionReg).getPricePerUnit();
+        courseReg.displayAll(price);
     }
 
     public void updateCourse(Course course){
@@ -156,11 +162,34 @@ public class Registrar {
 
     public void displayHierarchy() {
         List<Department> allDepts = departmentReg.displayAll();
+        if (allDepts.isEmpty()) {
+            System.out.println("No Departments found. Please create one first (Option 10).");
+            return;
+        }
         enrollmentService.viewDepartmentHierarchy(allDepts);
     }
 
     public void saveDept(Department department){
+        Department existing = findDeptByName(department.getDepartmentName());
+
+        if (existing != null) {
+            System.out.println("[!] Error: Department '" + department.getDepartmentName() + "' already exists.");
+            return; // Stop the save process
+        }
+
         departmentReg.save(department);
+        System.out.println("Department " + department.getDepartmentName() + " saved.");
+    }
+
+    public Department findDeptByName(String name) {
+        // We get the list from your existing displayAll() method
+        List<Department> allDepts = departmentReg.displayAll();
+        for (Department d : allDepts) {
+            if (d.getDepartmentName().equalsIgnoreCase(name)) {
+                return d;
+            }
+        }
+        return null;
     }
 
     public void displayAllDepts(){

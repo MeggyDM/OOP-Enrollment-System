@@ -17,6 +17,10 @@ public class Course {
     public String getCourseID() { return courseID; }
     public String getCourseName() { return courseName; }
     public String getCourseProgram() { return courseProgram; }
+    public void setCourseID(String courseID) { this.courseID = courseID; }
+    public void setCourseName(String courseName) { this.courseName = courseName; }
+    public void setCourseProgram(String courseProgram) { this.courseProgram = courseProgram; }
+    public void setUnits(int units) { this.units = units; }
     public int getUnits() { return units; }
 
     public void cdisplay() {

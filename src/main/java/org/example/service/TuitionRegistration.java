@@ -5,9 +5,13 @@ import org.example.model.Student;
 public class TuitionRegistration implements TuitionReg {
     private final double PRICE_PER_UNIT = 1000.0;
 
+
+    public double getPricePerUnit() {
+        return PRICE_PER_UNIT;
+    }
+
     @Override
     public double calculateTuitionFee(int units, double discounts) {
-        // Move your math logic here!
         double total = units * PRICE_PER_UNIT;
         if (discounts != 0) {
             total = total - (total * discounts);
