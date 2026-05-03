@@ -174,7 +174,7 @@ public class Registrar {
 
         if (existing != null) {
             System.out.println("[!] Error: Department '" + department.getDepartmentName() + "' already exists.");
-            return; // Stop the save process
+            return;
         }
 
         departmentReg.save(department);
@@ -182,7 +182,6 @@ public class Registrar {
     }
 
     public Department findDeptByName(String name) {
-        // We get the list from your existing displayAll() method
         List<Department> allDepts = departmentReg.displayAll();
         for (Department d : allDepts) {
             if (d.getDepartmentName().equalsIgnoreCase(name)) {
